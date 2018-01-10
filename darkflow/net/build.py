@@ -140,7 +140,7 @@ class TFNet(object):
 		
 		if self.FLAGS.summary is not None:
 			self.summary_op = tf.summary.merge_all()
-			self.writer = tf.summary.FileWriter(self.FLAGS.summary + 'train')
+			self.writer = tf.summary.FileWriter(os.path.join(self.FLAGS.summary,'train'))
 		
 		self.sess = tf.Session(config = tf.ConfigProto(**cfg))
 		self.sess.run(tf.global_variables_initializer())

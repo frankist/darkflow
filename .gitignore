@@ -44,3 +44,7 @@ ckpt/*
 
 #pytest cache
 .cache/
+
+# generated stuff
+darkflow/cython_utils/*.so
+.vscode/
