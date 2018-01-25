@@ -24,7 +24,7 @@ def findboxes(self, net_out):
 	boxes=box_constructor(meta,net_out)
 	return boxes
 
-def postprocess(self, net_out, im, save = True):
+def postprocess(self, net_out, im, save = True, put_text=True):
 	"""
 	Takes net output, draw net_out, save to disk
 	"""
@@ -54,8 +54,9 @@ def postprocess(self, net_out, im, save = True):
 		cv2.rectangle(imgcv,
 			(left, top), (right, bot),
 			colors[max_indx], thick)
-		cv2.putText(imgcv, mess, (left, top - 12),
-			0, 1e-3 * h, colors[max_indx],thick//3)
+        if put_text:
+            cv2.putText(imgcv, mess, (left, top - 12),
+                0, 1e-3 * h, colors[max_indx],thick//3)
 
 	if not save: return imgcv
 
