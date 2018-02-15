@@ -74,6 +74,10 @@ def loss(self, net_out):
     floor = centers - (wh * .5)
     ceil  = centers + (wh * .5)
 
+    # bound the floor and ceil predictions to canvas (this is more specific to RF)
+    # floor = tf.maximum(floor, [0,0])
+    # ceil = tf.minimum(ceil, [W,H])
+
     # calculate the intersection areas
     intersect_upleft   = tf.maximum(floor, _upleft)
     intersect_botright = tf.minimum(ceil , _botright)

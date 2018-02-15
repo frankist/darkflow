@@ -74,7 +74,7 @@ def preprocess(self, im, allobj = None):
 	if allobj is None: return im
 	return im#, np.array(im) # for unit testing
 
-def postprocess(self, net_out, im, save = True):
+def postprocess(self, net_out, im, save = True, put_text=True):
 	"""
 	Takes net output, draw predictions, save to disk
 	"""
@@ -103,10 +103,11 @@ def postprocess(self, net_out, im, save = True):
 		cv2.rectangle(imgcv,
 			(left, top), (right, bot),
 			self.meta['colors'][max_indx], thick)
-		cv2.putText(
-			imgcv, mess, (left, top - 12),
-			0, 1e-3 * h, self.meta['colors'][max_indx],
-			thick // 3)
+        if put_text:
+            cv2.putText(
+                imgcv, mess, (left, top - 12),
+                0, 1e-3 * h, self.meta['colors'][max_indx],
+                thick // 3)
 
 
 	if not save: return imgcv
