@@ -126,5 +126,6 @@ def shuffle(self):
             x_batch = np.concatenate(x_batch, 0)
             yield x_batch, feed_batch
         
-        print('Finish {} epoch(es)'.format(i + 1))
+        print('Finish {} epoch(es). {} epoches remaining'.format(i + 1,self.FLAGS.epoch-i))
+        print('Learning rate is {}.'.format(self.FLAGS.lr))
 

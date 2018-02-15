@@ -42,6 +42,9 @@ class Darknet(object):
             self.src_cfg = FLAGS.model
             if FLAGS.load: self.src_bin = None
             elif not exist: self.src_bin = None
+        elif FLAGS.load=='best':
+            self.src_cfg = FLAGS.model
+            self.src_bin = None
         else:
             assert os.path.isfile(FLAGS.load), \
             '{} not found'.format(FLAGS.load)

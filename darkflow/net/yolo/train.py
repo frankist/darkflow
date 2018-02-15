@@ -90,3 +90,4 @@ def loss(self, net_out):
     loss = tf.reduce_sum(loss, 1)
     self.loss = .5 * tf.reduce_mean(loss)
     tf.summary.scalar('{} loss'.format(m['model']), self.loss)
+    tf.summary.scalar('{} lr'.format(m['model']), self.FLAGS.lr)
