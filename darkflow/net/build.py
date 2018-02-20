@@ -29,6 +29,7 @@ class TFNet(object):
 	camera = help.camera
 	predict = flow.predict
 	return_predict = flow.return_predict
+	return_predict_batch = flow.return_predict_batch
 	to_darknet = help.to_darknet
 	build_train_op = help.build_train_op
 	load_from_ckpt = help.load_from_ckpt

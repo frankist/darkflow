@@ -200,3 +200,51 @@ def predict(self):
         # Timing
         self.say('Total time = {}s / {} inps = {} ips'.format(
             last, len(inp_feed), len(inp_feed) / last))
+
+def return_predict_batch(self, im_list):
+    assert isinstance(im_list[0], np.ndarray), \
+				'Image is not a np.ndarray'
+    h, w, _ = im_list[0].shape
+
+    # batch size
+    n_imgs = len(im_list)
+    batch = min(self.FLAGS.batch, n_imgs)
+    n_batch = int(math.ceil(n_imgs / batch))
+
+    # predict in batches
+    for j in range(n_batch):
+        from_idx = j * batch
+        to_idx = min(from_idx + batch, n_imgs)
+
+        # collect images input in the batch
+        this_batch = im_list[from_idx:to_idx]
+        inp_feed = pool.map(lambda inp: (
+            np.expand_dims(inp,0)), this_batch)
+        #im = self.framework.resize_input(im)
+        
+        # Feed to the net
+        feed_dict = {self.inp : np.concatenate(inp_feed, 0)}    
+        out = self.sess.run(self.out, feed_dict)
+        
+        # Post processing
+        def post_process(prediction):
+            boxes = self.framework.findboxes(prediction)
+            final_boxes = []
+            for box in boxes:
+                tmpBox = self.framework.process_box(box,h,w,self.FLAGS.threshold)
+                if tmpBox is None:
+                    continue
+                final_boxes.append({
+                    "label": tmpBox[4],
+                    "confidence": tmpBox[6],
+                    "topleft": {
+                        "x": tmpBox[0],
+                        "y": tmpBox[2]},
+                    "bottomright": {
+                        "x": tmpBox[1],
+                        "y": tmpBox[3]}
+                })
+            return final_boxes
+        boxes_list = pool.map(lambda prediction: post_process(prediction), out)
+
+        return boxes_list
